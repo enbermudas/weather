@@ -1,0 +1,9 @@
+{
+  "name": "weather",
+  "version": "1.0.0",
+  "description": "weather-checking api made with node, express and love.",
+  "main": "index.js",
+  "repository": "git@github.com:enbermudas/weather.git",
+  "author": "Enrique Bermúdez <enbermudez96@gmail.com>",
+  "license": "MIT"
+}
