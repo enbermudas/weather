@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/current', async (req, res) => {
   const result = await weather.current(req.body.name);
-  return res.status(200).send(result);
+  return res.status(result.code).send(result);
 });
 
 module.exports = router;
