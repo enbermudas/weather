@@ -22,12 +22,12 @@ class WeatherBit {
       });
 
       if (typeof data === 'string') {
-        return { message: 'No city has been found.', error: '404' }
+        return { message: 'No city has been found.', code: '404' };
       }
 
-      return data;
+      return { ...data, code: 200 };
     } catch (e) {
-      return e.response.data;
+      return { ...e.response.data, code: 500 };
     }
   }
 }
