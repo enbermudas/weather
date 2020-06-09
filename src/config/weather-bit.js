@@ -1,11 +1,14 @@
 const axios = require('axios');
-const { API_KEY } = require('./env');
+const { WB_KEY, IP_KEY } = require('./env');
 
 class WeatherBit {
   constructor() {
-    this.key = API_KEY;
-    this.uri = 'https://api.weatherbit.io/v2.0';
+    this.wbKey = WB_KEY;
+    this.ipKey = IP_KEY;
+    this.wbUri = 'https://api.weatherbit.io/v2.0';
+    this.ipUri = 'http://api.ipapi.com/check';
   }
+
   /**
    * Search for the current weather by city name.
    *
@@ -13,21 +16,33 @@ class WeatherBit {
    * @returns {object} the current weather information.
    */
   async current(name) {
-    try {
-      const { data } = await axios.get(`${this.uri}/current`, {
-        params: {
-          city: name,
-          key: this.key
-        }
-      });
+    const params = {
+      key: this.wbKey
+    };
 
-      if (typeof data === 'string') {
-        return { message: 'No city has been found.', code: '404' };
+    try {
+      if (!name) {
+        const { data } = await axios.get(this.ipUri, {
+          params: {
+            access_key: this.ipKey
+          }
+        });
+
+        params.lat = data.latitude;
+        params.lon = data.longitude;
+      } else {
+        params.city = name;
       }
 
-      return { ...data, code: 200 };
+      const { data } = await axios.get(`${this.wbUri}/current`, { params });
+
+      if (typeof data === 'string') {
+        throw new Error('No city has been found.');
+      } else {
+        return { ...data, code: 200 };
+      }
     } catch (e) {
-      return { ...e.response.data, code: 500 };
+      return { message: 'Internal server error', code: 500 };
     }
   }
 }
