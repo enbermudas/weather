@@ -8,4 +8,9 @@ router.post('/current', async (req, res) => {
   return res.status(result.code).send(result);
 });
 
+router.post('/forecast', async (req, res) => {
+  const result = await weather.forecast(req.body.name);
+  return res.status(result.code).send(result);
+});
+
 module.exports = router;
