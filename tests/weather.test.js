@@ -15,17 +15,17 @@ describe('(CONFIG) WEATHER BIT', () => {
         })
         .end((err, res) => {
           expect(res.body).to.have.property('message');
-          expect(res).to.have.status(404);
+          expect(res).to.have.status(500);
           done();
         });
     });
 
-    it('should fail if no city name is provided', (done) => {
+    it('should succeed if no city name is provided (default fetch with ipapi)', (done) => {
       request(server)
         .post('/api/v1/weather/current')
         .end((err, res) => {
-          expect(res.body).to.have.property('error');
-          expect(res).to.have.status(500);
+          expect(res.body).to.have.property('data');
+          expect(res.body).to.have.property('count');
           done();
         });
     });
